@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <style>
+    #app {
+      position: absolute;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background-color: black;
+    }
+    .circle {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: teal;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div v-for="(circle, index) in circles" 
+       :key="circle.id" 
+       :class="'circle'" 
+       :style="{
+         left: circle.x + 'px',
+         top: circle.y + 'px',
+         opacity: circle.opacity
+       }">
+  </div>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data() {
+    return {
+      circles: [],
+      circleDelay: 100,
+      maxCirclesNumber: 5,
+      circleId: 0
+    };
+  },
+  methods: {
+    handleMouseMove(event) {
+      const x = event.clientX - 20;
+      const y = event.clientY - 20;
+      
+      for (let i = 0; i < this.maxCirclesNumber; i++) {
+        setTimeout(() => {
+          this.addNextCircle(x, y, 1 - (i * 0.2));
+        }, i * this.circleDelay);
+      }
+    },
+    addNextCircle(x, y, opacity) {
+      this.circles.push({
+        id: this.circleId++,
+        x,
+        y,
+        opacity
+      });
+      
+      if (this.circles.length > this.maxCirclesNumber) {
+        this.circles.shift();
+      }
+    }
+  },
+  mounted() {
+    this.$el.addEventListener('mousemove', this.handleMouseMove);
+  },
+  beforeDestroy() {
+    this.$el.removeEventListener('mousemove', this.handleMouseMove);
+  }
+});
+</script>
+</body>
+</html>
