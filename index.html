@@ -22,7 +22,7 @@
 <body>
 <div id="app">
   <div v-for="(circle, index) in circles" 
-       :key="circle.id" 
+       :key="index" 
        :class="'circle'" 
        :style="{
          left: circle.x + 'px',
@@ -39,8 +39,7 @@ new Vue({
     return {
       circles: [],
       circleDelay: 100,
-      maxCirclesNumber: 5,
-      circleId: 0
+      maxCirclesNumber: 5
     };
   },
   methods: {
@@ -56,7 +55,6 @@ new Vue({
     },
     addNextCircle(x, y, opacity) {
       this.circles.push({
-        id: this.circleId++,
         x,
         y,
         opacity
